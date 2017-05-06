@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>instadam</title>
+</head>
+<body>
+    <div class="page-form">
+        <form class="js-fetch-form">
+            <label>Username:
+                <input name="username" />
+            </label>
+            <button type="submit">Fetch</button>
+        </form>
+    </div>
+
+    <div class="page-photos" hidden>
+        <button type="button">Generate</button>
+        <div class="photos">
+            <!-- photos -->
+            <button type="button">load more</button>
+        </div>
+    </div>
+
+    <div class="page-results" hidden>
+        <div>
+            <h1>@{username}</h1>
+            <h2>By {full_name}</h2>
+            <p>{biography}</p>
+        </div>
+        <div>
+            <p>{followed_by} Followers</p>
+            <p>{external_url}</p>
+        </div>
+
+        <div class="photos">
+            <!-- TODO: make this work with any number of photos between 2 and 12 inclusive -->
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+    <script src="script.js" defer></script>
+</body>
+</html>
