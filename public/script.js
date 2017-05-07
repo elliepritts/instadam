@@ -1,3 +1,48 @@
+$(function() {
+
+    $('template').each(function() {
+        var $template = $(this);
+        $template.data('outlet', $('<div/>').insertAfter($template));
+    });
+
+    $('body').on('click', '.photo', function() {
+        $(this).toggleClass('active');
+    });
+
+    $('.js-fetch-form').submit(function() {
+        var username;
+
+        try {
+            username = /^(?:https?:\/\/www.instagram.com\/)?([^\/?#]+)/.exec($(this).find('[name="username"]').val())[1];
+        } catch(e) {
+            return false;
+        }
+
+        var Profile = $.get(['', 'api', username].join('/'));
+        var Photos = Profile.then(function(data) {
+            return data.photos;
+        });
+
+        // Clean up photos
+        $('.js-photos').empty();
+
+        Profile.then(injectProfile)
+        Photos.then(injectPhotos);
+
+        return false;
+    });
+
+    $('.js-load-more').click(function() {
+        var username = $('.js-fetch-form [name="username"]').val();
+        var max_id = $('.js-photos .photo:last-child').attr('data-id');
+
+        var Photos = $.get(['', 'api', username, 'photos', max_id].join('/'));
+
+        Photos.then(injectPhotos);
+    });
+
+});
+
 function injectPhotos(photos) {
     var $photos = $($.parseHTML(
         photos.map(function(photo) {
@@ -10,36 +55,17 @@ function injectPhotos(photos) {
         }).join('')
     ));
 
-    $('.page-photos .photos').append($photos);
-};
+    $('.js-photos').append($photos);
+}
 
-$(function() {
+function injectProfile(profile) {
+    $('template').each(function() {
+        var $template = $(this),
+            $div = $template.data('outlet'),
+            template = $template[0].innerHTML;
 
-    $('.js-fetch-form').submit(function() {
-        var username = $(this).find('[name="username"]').val();
-        // TODO: clean up username if its actually a url
-
-
-        var Profile = $.get(['', 'api', username].join('/'));
-        var Photos = Profile.then(function(data) {
-            return data.photos;
-        });
-
-
-        Photos.then(injectPhotos).then(function() {
-            $('.page-photos').removeAttr('hidden');
-        });
-
-        return false;
+        $div.html(template.replace(/\{(.*)\}/gi, function(match, key) {
+            return profile[key];
+        }));
     });
-
-    $('.js-load-more').click(function() {
-        var username = $('.js-fetch-form [name="username"]').val();
-        var max_id = $('.page-photos .photos .photo').last().attr('data-id');
-
-        var Photos = $.get(['', 'api', username, 'photos', max_id].join('/'));
-
-        Photos.then(injectPhotos);
-    });
-
-});
+}
