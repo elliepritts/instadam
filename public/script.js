@@ -5,42 +5,48 @@ $(function() {
         $template.data('outlet', $('<div/>').insertAfter($template));
     });
 
-    $('body').on('click', '.photo', function() {
-        $(this).toggleClass('active');
-    });
+    $('body')
+        .on('click', '.photo', function() {
+            $(this).toggleClass('active');
+        })
+        .on('click', '.js-load-more', function() {
+            var $button = $(this).prop('disabled', true).html('...');
+            var username = $('.js-fetch-form [name="username"]').val();
+            var max_id = $('.js-photos .photo:last-child').attr('data-id');
 
-    $('.js-fetch-form').submit(function() {
-        var username;
+            var Photos = $.get(['', 'api', username, 'photos', max_id].join('/'));
 
-        try {
-            username = /^(?:https?:\/\/www.instagram.com\/)?([^\/?#]+)/.exec($(this).find('[name="username"]').val())[1];
-        } catch(e) {
+            Photos.then(injectPhotos).then(function() {
+                $button.prop('disabled', false).html('Load More');
+            });
+        })
+        .on('submit', '.js-fetch-form', function() {
+            var $button = $(this).find('button').prop('disabled', true).html('...');
+            var username;
+
+            try {
+                username = /^(?:https?:\/\/www.instagram.com\/)?([^\/?#]+)/.exec($(this).find('[name="username"]').val())[1];
+            } catch(e) {
+                return false;
+            }
+
+            var Profile = $.get(['', 'api', username].join('/'));
+            var Photos = Profile.then(function(data) {
+                return data.photos;
+            });
+
+            // Clean up photos, show the bottom textarea
+            Profile.then(function() {
+                $button.prop('disabled', false).html('&rarr;');
+                $('.main-bottom').removeAttr('hidden');
+                $('.js-photos').empty();
+            });
+
+            Profile.then(injectProfile);
+            Photos.then(injectPhotos);
+
             return false;
-        }
-
-        var Profile = $.get(['', 'api', username].join('/'));
-        var Photos = Profile.then(function(data) {
-            return data.photos;
         });
-
-        // Clean up photos
-        $('.js-photos').empty();
-
-        Profile.then(injectProfile)
-        Photos.then(injectPhotos);
-
-        return false;
-    });
-
-    $('.js-load-more').click(function() {
-        var username = $('.js-fetch-form [name="username"]').val();
-        var max_id = $('.js-photos .photo:last-child').attr('data-id');
-
-        var Photos = $.get(['', 'api', username, 'photos', max_id].join('/'));
-
-        Photos.then(injectPhotos);
-    });
-
 });
 
 function injectPhotos(photos) {

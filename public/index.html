@@ -7,7 +7,7 @@
 <body>
     <main>
         <form class="js-fetch-form">
-            <label>@<input name="username" autofocus required /></label>
+            <label>Instagram: <input name="username" autofocus required /></label>
             <button type="submit">&rarr;</button>
         </form>
 
@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <div class="main-bottom">
+        <div class="main-bottom" hidden>
             <div contenteditable="true" style="min-height: 1em"></div>
         </div>
     </main>
@@ -40,7 +40,9 @@
         <div class="photos js-photos">
             <!-- TODO: make this work with any number of photos between 2 and 12 inclusive -->
         </div>
-        <button type="button" class="load-more js-load-more">Load More</button>
+        <template>
+            <button type="button" class="load-more js-load-more">Load More</button>
+        </template>
     </aside>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
