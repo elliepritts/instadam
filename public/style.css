@@ -1,0 +1,16 @@
+.photos::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+.photo {
+    background-position: center;
+    background-size: cover;
+    max-width: 600px;
+    width: 100%;
+    float: left;
+}
+
+.photo > .spacer {
+    display: block;
+}

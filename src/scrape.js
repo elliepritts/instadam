@@ -41,14 +41,14 @@ module.exports = {
                         dimensions: { width: node.images.standard_resolution.width, height: node.images.standard_resolution.height },
                         is_video: 'video' === node.type,
                         display_src: node.images.standard_resolution.url,
-                        caption: node.caption.text,
+                        caption: node.caption ? node.caption.text : null,
                         comments: node.comments.count,
                         likes: node.likes.count,
                     }
                 })
                 .filter(node => !node.is_video);
 
-                resolve({ photos });
+                resolve(photos);
             });
         });
     }
