@@ -7,7 +7,7 @@ $(function() {
 
     $('body')
         .on('click', '.photo', function() {
-            $(this).toggleClass('active');
+            $(this).parent().toggleClass('is-active');
         })
         .on('click', '.js-load-more', function() {
             var $button = $(this).prop('disabled', true).html('...');
@@ -52,12 +52,11 @@ $(function() {
 function injectPhotos(photos) {
     var $photos = $($.parseHTML(
         photos.map(function(photo) {
-            return '<div class="photo" style="background-image:url(' +
-                photo.display_src + ')" data-id="' + photo.id +
-                '" data-src="' + photo.display_src +
-                '"><span class="spacer" style="padding-top:' +
+            return '<div class="photo-container"><div data-id="' + photo.id +
+                '" class="photo" style="background-image:url(' +
+                photo.display_src + '); padding-top:' +
                 ((photo.dimensions.height / photo.dimensions.width) * 100) +
-                '%"></span></div>';
+                '%"></div></div>';
         }).join('')
     ));
 
