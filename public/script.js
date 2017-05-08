@@ -7,12 +7,24 @@ $(function() {
 
     $('body')
         .on('click', '.photo', function() {
+            if ($('.is-active').length > 11) {
+                alert('Please select at most 12 photos');
+                return false;
+            }
+
             $(this).parent().toggleClass('is-active');
+
+            $('.js-photos').attr('data-count', $('.is-active').length);
         })
         .on('click', '.js-load-more', function() {
             var $button = $(this).prop('disabled', true).html('...');
-            var username = $('.js-fetch-form [name="username"]').val();
-            var max_id = $('.js-photos .photo:last-child').attr('data-id');
+            var username = parseUsername($('[name="username"]').val());
+            var max_id = $('.js-photos .photo-container:last-child').attr('data-id');
+
+            if (!username) {
+                alert('Sorry, but I do not recognize this as a valid username or instagram URL');
+                return false;
+            }
 
             var Photos = $.get(['', 'api', username, 'photos', max_id].join('/'));
 
@@ -22,13 +34,14 @@ $(function() {
         })
         .on('submit', '.js-fetch-form', function() {
             var $button = $(this).find('button').prop('disabled', true).html('...');
-            var username;
+            var username = parseUsername($(this).find('[name="username"]').val());
 
-            try {
-                username = /^(?:https?:\/\/www.instagram.com\/)?([^\/?#]+)/.exec($(this).find('[name="username"]').val())[1];
-            } catch(e) {
+            if (!username) {
+                alert('Sorry, but I do not recognize this as a valid username or instagram URL');
                 return false;
             }
+
+            document.title = username;
 
             var Profile = $.get(['', 'api', username].join('/'));
             var Photos = Profile.then(function(data) {
@@ -49,14 +62,20 @@ $(function() {
         });
 });
 
+function parseUsername(username) {
+    try {
+        return /^(?:(?:https?:\/\/)?(?:www.)?instagram.com\/)?([^\/?#]+)/.exec(username)[1];
+    } catch(e) {
+        return false;
+    }
+}
+
 function injectPhotos(photos) {
     var $photos = $($.parseHTML(
         photos.map(function(photo) {
-            return '<div class="photo-container"><div data-id="' + photo.id +
-                '" class="photo" style="background-image:url(' +
-                photo.display_src + '); padding-top:' +
-                ((photo.dimensions.height / photo.dimensions.width) * 100) +
-                '%"></div></div>';
+            return '<div class="photo-container" data-id="' +
+            photo.id + '"><img class="photo" src="' +
+            photo.display_src + '" alt=""></div>';
         }).join('')
     ));
 
@@ -70,7 +89,7 @@ function injectProfile(profile) {
             template = $template[0].innerHTML;
 
         $div.html(template.replace(/\{(.*)\}/gi, function(match, key) {
-            return profile[key];
+            return profile[key] || '';
         }));
     });
 }

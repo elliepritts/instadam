@@ -11,6 +11,8 @@
             <button type="submit">&rarr;</button>
         </form>
 
+        <div class="info">iPhone User Profiles</div>
+
         <template>
             <h1 contenteditable="true">@{username}</h1>
             <h2 contenteditable="true">By {full_name}</h2>
@@ -37,9 +39,7 @@
     </main>
 
     <aside>
-        <div class="photos js-photos">
-            <!-- TODO: make this work with any number of photos between 2 and 12 inclusive -->
-        </div>
+        <div class="photos js-photos"></div>
         <template>
             <button type="button" class="load-more js-load-more">Load More</button>
         </template>

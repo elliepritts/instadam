@@ -14,7 +14,6 @@ module.exports = {
                     .map(node => {
                         return {
                             id: node.id,
-                            dimensions: node.dimensions,
                             is_video: node.is_video,
                             display_src: node.display_src,
                             caption: node.caption,
@@ -38,7 +37,6 @@ module.exports = {
                 const photos = data.map(node => {
                     return {
                         id: node.id,
-                        dimensions: { width: node.images.standard_resolution.width, height: node.images.standard_resolution.height },
                         is_video: 'video' === node.type,
                         display_src: node.images.standard_resolution.url,
                         caption: node.caption ? node.caption.text : null,
