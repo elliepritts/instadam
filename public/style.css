@@ -2,7 +2,7 @@ body {
     display: flex;
     flex-direction: row;
     background: #ebebeb;
-    margin: 30px 50px 0 50px;
+    margin: 50px 80px 0 80px;
     max-width: 1587px;
     font-family: Helvetica;
 }
@@ -125,8 +125,6 @@ aside {
 
     body {
         width: 1587px;
-        background: linear-gradient(to bottom, #ebebeb, #ebebeb);
-        background-color: #ebebeb !important;
         -webkit-print-color-adjust: exact;
     }
 
