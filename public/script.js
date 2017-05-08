@@ -46,7 +46,10 @@ $(function() {
 
             document.title = username;
 
-            var Profile = $.get(['', 'api', username].join('/'));
+            var Profile = $.get(['', 'api', username].join('/')).then(function(data) {
+                data.followed_by = Number(data.followed_by).toLocaleString();
+                return data;
+            });
             var Photos = Profile.then(function(data) {
                 return data.photos;
             });
