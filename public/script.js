@@ -7,14 +7,17 @@ $(function() {
 
     $('body')
         .on('click', '.photo', function() {
-            if ($('.is-active').length > 11) {
+            $(this).parent().toggleClass('is-active');
+
+            var activeCount = $('.is-active').length;
+
+            if (activeCount > 12) {
                 alert('Please select at most 12 photos');
+                $(this).parent().toggleClass('is-active');
                 return false;
             }
 
-            $(this).parent().toggleClass('is-active');
-
-            $('.js-photos').attr('data-count', $('.is-active').length);
+            $('.js-photos').attr('data-count', activeCount);
         })
         .on('click', '.js-load-more', function() {
             var $button = $(this).prop('disabled', true).html('...');
