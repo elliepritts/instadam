@@ -29,11 +29,13 @@ $(function() {
                 return false;
             }
 
-            var Photos = $.get(['', 'api', username, 'photos', max_id].join('/'));
-
-            Photos.then(injectPhotos).then(function() {
+            var Photos = $.get(['', 'api', username, 'photos', max_id].join('/')).always(function() {
                 $button.prop('disabled', false).html('Load More');
+            }).fail(function(jqXHR) {
+                alert(jqXHR.responseJSON.error || 'An error occurred');
             });
+
+            Photos.then(injectPhotos);
         })
         .on('submit', '.js-fetch-form', function() {
             var $button = $(this).find('button').prop('disabled', true).html('...');
@@ -49,14 +51,18 @@ $(function() {
             var Profile = $.get(['', 'api', username].join('/')).then(function(data) {
                 data.followed_by = Number(data.followed_by).toLocaleString();
                 return data;
+            }).always(function() {
+                $button.prop('disabled', false).html('&rarr;');
+            }).fail(function(jqXHR) {
+                alert(jqXHR.responseJSON.error || 'An error occurred');
             });
+
             var Photos = Profile.then(function(data) {
                 return data.photos;
             });
 
             // Clean up photos, show the bottom textarea
             Profile.then(function() {
-                $button.prop('disabled', false).html('&rarr;');
                 $('.main-bottom').removeAttr('hidden');
                 $('.js-photos').empty();
             });
