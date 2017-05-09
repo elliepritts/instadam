@@ -3,12 +3,19 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "pkg": {
+    "assets": [
+      "public/**/*"
+    ]
+  },
+  "bin": "index.js",
   "scripts": {
     "start": "node ./index.js"
   },
   "dependencies": {
     "express": "^4.15.2",
     "express-promise": "^0.4.0",
-    "insta-scraper": "^1.0.2"
+    "insta-scraper": "^1.0.2",
+    "opn": "^5.0.0"
   }
 }

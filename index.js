@@ -1,4 +1,5 @@
 var express = require('express');
+var opn = require('opn');
 var { scrapeProfile, scrapePhotos } = require('./src/scrape');
 
 // twelve items or less
@@ -6,7 +7,7 @@ var app = express();
 app.use(require('express-promise')());
 
 // static cling
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 
 // gimme an ipa and ill give you an api
 app.get('/api/:username', function(req, res) {
@@ -24,3 +25,4 @@ app.get('/api/:username/photos/:maxid', function(req, res) {
 
 // can you hear me now
 app.listen(3333);
+opn('http://localhost:3333');
