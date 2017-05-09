@@ -13,14 +13,18 @@ app.use(express.static(__dirname + '/public'));
 app.get('/api/:username', function(req, res) {
     const username = req.params.username;
 
-    res.json(scrapeProfile(username));
+    scrapeProfile(username)
+        .then(data => res.json(data))
+        .catch(data => res.status(400).json(data));
 });
 
 app.get('/api/:username/photos/:maxid', function(req, res) {
     const username = req.params.username;
     const max_id = req.params.maxid;
 
-    res.json(scrapePhotos(username, max_id));
+    scrapePhotos(username, max_id)
+        .then(data => res.json(data))
+        .catch(data => res.status(400).json(data));
 });
 
 // can you hear me now

@@ -15,7 +15,8 @@
   "dependencies": {
     "express": "^4.15.2",
     "express-promise": "^0.4.0",
-    "insta-scraper": "^1.0.2",
-    "opn": "^5.0.0"
+    "opn": "^5.0.0",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4"
   }
 }
