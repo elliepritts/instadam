@@ -1,5 +1,4 @@
 var express = require('express');
-var opn = require('opn');
 var { scrapeProfile, scrapePhotos } = require('./src/scrape');
 
 // twelve items or less
@@ -28,5 +27,4 @@ app.get('/api/:username/photos/:maxid', function(req, res) {
 });
 
 // can you hear me now
-app.listen(3333);
-opn('http://localhost:3333');
+app.listen(process.env.PORT || 3333);
